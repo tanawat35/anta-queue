@@ -1,5 +1,5 @@
 {
- "updated": "06/11/2026 19:38",
+ "updated": "06/11/2026 19:48",
  "queue": {
   "4W": [
    {
@@ -9,10 +9,8 @@
     "trips": 1,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#A03E99",
-    "last": "-"
+    "color": "#F45B69",
+    "last": "23/10"
    },
    {
     "rank": 2,
@@ -21,10 +19,8 @@
     "trips": 1,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#3D5A80",
-    "last": "-"
+    "color": "#76B041",
+    "last": "30/10"
    },
    {
     "rank": 3,
@@ -33,10 +29,8 @@
     "trips": 2,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#FFC914",
-    "last": "-"
+    "color": "#F45B69",
+    "last": "03/11"
    },
    {
     "rank": 4,
@@ -45,10 +39,8 @@
     "trips": 3,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#F45B69",
-    "last": "-"
+    "color": "#EF476F",
+    "last": "22/10"
    },
    {
     "rank": 5,
@@ -57,10 +49,8 @@
     "trips": 3,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#D4A017",
-    "last": "-"
+    "color": "#17BEBB",
+    "last": "22/10"
    },
    {
     "rank": 6,
@@ -69,10 +59,8 @@
     "trips": 4,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#76B041",
-    "last": "-"
+    "color": "#A03E99",
+    "last": "29/10"
    },
    {
     "rank": 7,
@@ -81,10 +69,8 @@
     "trips": 7,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#A03E99",
-    "last": "-"
+    "color": "#06D6A0",
+    "last": "05/11"
    },
    {
     "rank": 8,
@@ -93,10 +79,8 @@
     "trips": 14,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#B56576",
-    "last": "-"
+    "color": "#118AB2",
+    "last": "04/11"
    },
    {
     "rank": 9,
@@ -105,10 +89,8 @@
     "trips": 22,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#2E86AB",
-    "last": "-"
+    "color": "#06D6A0",
+    "last": "05/11"
    },
    {
     "rank": 10,
@@ -117,10 +99,8 @@
     "trips": 24,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#F45B69",
-    "last": "-"
+    "color": "#A03E99",
+    "last": "02/11"
    },
    {
     "rank": 11,
@@ -129,10 +109,8 @@
     "trips": 23,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#5C7AEA",
-    "last": "-"
+    "color": "#F45B69",
+    "last": "05/11"
    },
    {
     "rank": 12,
@@ -141,10 +119,8 @@
     "trips": 24,
     "prov": 2,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#5C7AEA",
-    "last": "-"
+    "color": "#E4572E",
+    "last": "05/11"
    },
    {
     "rank": 13,
@@ -153,10 +129,8 @@
     "trips": 26,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#FFC914",
-    "last": "-"
+    "color": "#06D6A0",
+    "last": "30/10"
    },
    {
     "rank": 14,
@@ -165,10 +139,8 @@
     "trips": 29,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#2E86AB",
-    "last": "-"
+    "color": "#17BEBB",
+    "last": "05/11"
    },
    {
     "rank": 15,
@@ -177,10 +149,8 @@
     "trips": 43,
     "prov": 0,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#E4572E",
-    "last": "-"
+    "color": "#EF476F",
+    "last": "06/11"
    },
    {
     "rank": 16,
@@ -189,10 +159,8 @@
     "trips": 47,
     "prov": 2,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#F45B69",
-    "last": "-"
+    "color": "#17BEBB",
+    "last": "05/11"
    },
    {
     "rank": 17,
@@ -201,12 +169,9 @@
     "trips": 63,
     "prov": 2,
     "pen": 0,
-    "assigned": false,
-    "job": "",
-    "color": "#5C7AEA",
-    "last": "-"
+    "color": "#17BEBB",
+    "last": "06/11"
    }
   ]
- },
- "release_at": null
+ }
 }
