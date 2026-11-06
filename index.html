@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="th"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>คิว พขร. ANTA</title>
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --line:#243040; --txt:#e6edf3; --dim:#8b949e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt);
+         font-family:-apple-system,"Segoe UI",Sarabun,"Noto Sans Thai",sans-serif; }
+  header { padding:18px 16px 6px; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  .stamp { color:var(--dim); font-size:12px; }
+  section { padding:8px 16px 24px; }
+  h2 { font-size:15px; color:#7ee787; margin:18px 0 2px; letter-spacing:.5px; }
+  .next { color:var(--dim); font-size:13px; margin:4px 0 14px; }
+  .next b { color:var(--txt); }
+  .tower { display:flex; flex-direction:column; gap:8px; }
+  .slot { display:flex; align-items:center; gap:12px; background:var(--panel);
+           border:1px solid var(--line); border-radius:14px; padding:10px 12px;
+           animation:drop .55s cubic-bezier(.2,.9,.3,1.2) both;
+           animation-delay:calc(var(--i) * 70ms); }
+  @keyframes drop { from { transform:translateY(-26px); opacity:0; } to { transform:none; opacity:1; } }
+  .num { width:26px; text-align:right; color:var(--dim); font-weight:700; font-size:14px; }
+  .ball { width:38px; height:38px; border-radius:50%; background:radial-gradient(circle at 32% 28%, #ffffff55, var(--c) 62%);
+           display:grid; place-items:center; box-shadow:0 4px 12px #0006, inset 0 -3px 8px #0004;
+           animation:bounce .7s ease-out both; animation-delay:calc(var(--i) * 70ms + 260ms); }
+  @keyframes bounce { 0% { transform:scale(.4); } 60% { transform:scale(1.12); } 100% { transform:scale(1); } }
+  .ini { font-size:11px; font-weight:700; color:#0d1117; background:#ffffffc9;
+          border-radius:999px; padding:1px 5px; }
+  .info { min-width:0; }
+  .nm { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .meta { font-size:12px; color:var(--dim); }
+  .pen { font-size:10px; background:#7d2b2b; color:#ffb4b4; border-radius:6px; padding:1px 6px; margin-left:6px; }
+  footer { padding:0 16px 30px; color:var(--dim); font-size:12px; line-height:1.6; }
+  .bar { height:6px; border-radius:6px; background:linear-gradient(90deg,#2ea043,#d29922,#f85149); margin:10px 16px 0; opacity:.5; }
+</style></head>
+<body>
+<header>
+  <h1>คิวงาน พขร. ANTA</h1>
+  <div class="stamp">อัปเดต 06/11/2026 19:10 · นับย้อนหลัง 30 วัน · ยิ่งสะสมน้อย ยิ่งได้งานก่อน</div>
+  <div class="bar"></div>
+</header>
+
+    <section>
+      <h2>คิว 4W</h2>
+      <p class="next">คิวถัดไป: <b>มีนา → ธนวัฒน์ → ภาณุวัฒน์</b></p>
+      <div class="tower">
+      <div class="slot" style="--i:1">
+        <div class="num">1</div>
+        <div class="ball" style="--c:#A03E99">
+          <span class="ini">มีนา</span>
+        </div>
+        <div class="info">
+          <div class="nm">มีนา เรืองศิริ </div>
+          <div class="meta">1 วัน · 1 เที่ยว · ล่าสุด 23/10</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:2">
+        <div class="num">2</div>
+        <div class="ball" style="--c:#3D5A80">
+          <span class="ini">ธนวั</span>
+        </div>
+        <div class="info">
+          <div class="nm">ธนวัฒน์ หอมชื่น </div>
+          <div class="meta">1.5 วัน · 1 เที่ยว · ล่าสุด 30/10</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:3">
+        <div class="num">3</div>
+        <div class="ball" style="--c:#FFC914">
+          <span class="ini">ภาณุ</span>
+        </div>
+        <div class="info">
+          <div class="nm">ภาณุวัฒน์ ครึ้มค้างพลู </div>
+          <div class="meta">2 วัน · 2 เที่ยว · ล่าสุด 03/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:4">
+        <div class="num">4</div>
+        <div class="ball" style="--c:#F45B69">
+          <span class="ini">สัญช</span>
+        </div>
+        <div class="info">
+          <div class="nm">สัญชัย ศรีอินทร์จันทร์ </div>
+          <div class="meta">3 วัน · 3 เที่ยว · ล่าสุด 22/10</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:5">
+        <div class="num">5</div>
+        <div class="ball" style="--c:#D4A017">
+          <span class="ini">ธนูเ</span>
+        </div>
+        <div class="info">
+          <div class="nm">ธนูเดช เชื้อวงษ์ </div>
+          <div class="meta">3.5 วัน · 3 เที่ยว · ล่าสุด 22/10</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:6">
+        <div class="num">6</div>
+        <div class="ball" style="--c:#76B041">
+          <span class="ini">พีระ</span>
+        </div>
+        <div class="info">
+          <div class="nm">พีระยุทธ์ คำดี </div>
+          <div class="meta">4.5 วัน · 4 เที่ยว · ล่าสุด 29/10</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:7">
+        <div class="num">7</div>
+        <div class="ball" style="--c:#D4A017">
+          <span class="ini">สมพร</span>
+        </div>
+        <div class="info">
+          <div class="nm">สมพร เจะโกะ </div>
+          <div class="meta">6 วัน · 5 เที่ยว · ล่าสุด 06/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:8">
+        <div class="num">8</div>
+        <div class="ball" style="--c:#A03E99">
+          <span class="ini">เลอส</span>
+        </div>
+        <div class="info">
+          <div class="nm">เลอสรรค์ โคขุนทด </div>
+          <div class="meta">8.5 วัน · 7 เที่ยว · ล่าสุด 05/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:9">
+        <div class="num">9</div>
+        <div class="ball" style="--c:#B56576">
+          <span class="ini">สมบู</span>
+        </div>
+        <div class="info">
+          <div class="nm">สมบูรณ์ เครือยิหวา </div>
+          <div class="meta">15.5 วัน · 14 เที่ยว · ล่าสุด 04/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:10">
+        <div class="num">10</div>
+        <div class="ball" style="--c:#2E86AB">
+          <span class="ini">อัคร</span>
+        </div>
+        <div class="info">
+          <div class="nm">อัครินทร์ กุลศิริธนวัฒน์ </div>
+          <div class="meta">24.5 วัน · 22 เที่ยว · ล่าสุด 05/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:11">
+        <div class="num">11</div>
+        <div class="ball" style="--c:#F45B69">
+          <span class="ini">ชาญว</span>
+        </div>
+        <div class="info">
+          <div class="nm">ชาญวิทย์ ภู่พงษ์สิน </div>
+          <div class="meta">26.5 วัน · 24 เที่ยว · ล่าสุด 02/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:12">
+        <div class="num">12</div>
+        <div class="ball" style="--c:#5C7AEA">
+          <span class="ini">ศุภส</span>
+        </div>
+        <div class="info">
+          <div class="nm">ศุภสิทธิ์ จันทร์สิน </div>
+          <div class="meta">26.5 วัน · 23 เที่ยว · ล่าสุด 05/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:13">
+        <div class="num">13</div>
+        <div class="ball" style="--c:#5C7AEA">
+          <span class="ini">วัลล</span>
+        </div>
+        <div class="info">
+          <div class="nm">วัลลภ บุตรดี </div>
+          <div class="meta">28 วัน · 24 เที่ยว · ล่าสุด 05/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:14">
+        <div class="num">14</div>
+        <div class="ball" style="--c:#FFC914">
+          <span class="ini">บุญม</span>
+        </div>
+        <div class="info">
+          <div class="nm">บุญมาก ปริธรรมมา </div>
+          <div class="meta">30 วัน · 26 เที่ยว · ล่าสุด 30/10</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:15">
+        <div class="num">15</div>
+        <div class="ball" style="--c:#2E86AB">
+          <span class="ini">อาสื</span>
+        </div>
+        <div class="info">
+          <div class="nm">อาสือมั่น ตาเฮ </div>
+          <div class="meta">31.5 วัน · 29 เที่ยว · ล่าสุด 05/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:16">
+        <div class="num">16</div>
+        <div class="ball" style="--c:#E4572E">
+          <span class="ini">วันเ</span>
+        </div>
+        <div class="info">
+          <div class="nm">วันเฉลิม มงคลบุตร </div>
+          <div class="meta">47.5 วัน · 43 เที่ยว · ล่าสุด 06/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:17">
+        <div class="num">17</div>
+        <div class="ball" style="--c:#F45B69">
+          <span class="ini">แสงท</span>
+        </div>
+        <div class="info">
+          <div class="nm">แสงทอง ด่านระหาร </div>
+          <div class="meta">55 วัน · 47 เที่ยว · ล่าสุด 05/11</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:18">
+        <div class="num">18</div>
+        <div class="ball" style="--c:#5C7AEA">
+          <span class="ini">ปุณณ</span>
+        </div>
+        <div class="info">
+          <div class="nm">ปุณณวิช แสงใส </div>
+          <div class="meta">70 วัน · 63 เที่ยว · ล่าสุด 06/11</div>
+        </div>
+      </div></div>
+    </section>
+    <section>
+      <h2>คิว 6W</h2>
+      <p class="next">คิวถัดไป: <b>ธีรวุฒิ → วุฒิวัฒน์ → ภาณุวัฒน์</b></p>
+      <div class="tower">
+      <div class="slot" style="--i:1">
+        <div class="num">1</div>
+        <div class="ball" style="--c:#5C7AEA">
+          <span class="ini">ธีรว</span>
+        </div>
+        <div class="info">
+          <div class="nm">ธีรวุฒิ โสภา </div>
+          <div class="meta">1 วัน · 1 เที่ยว · ล่าสุด 27/10</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:2">
+        <div class="num">2</div>
+        <div class="ball" style="--c:#2E86AB">
+          <span class="ini">วุฒิ</span>
+        </div>
+        <div class="info">
+          <div class="nm">วุฒิวัฒน์ กวดสันเทียะ </div>
+          <div class="meta">1 วัน · 1 เที่ยว · ล่าสุด 27/10</div>
+        </div>
+      </div>
+      <div class="slot" style="--i:3">
+        <div class="num">3</div>
+        <div class="ball" style="--c:#5C7AEA">
+          <span class="ini">ภาณุ</span>
+        </div>
+        <div class="info">
+          <div class="nm">ภาณุวัฒน์ รวยสันเทียะ </div>
+          <div class="meta">2 วัน · 2 เที่ยว · ล่าสุด 27/10</div>
+        </div>
+      </div></div>
+    </section>
+<footer>
+  ลูกบอลสี = คนขับ 1 คน · ตัวเลขในช่อง = ลำดับคิว<br>
+  ยกเลิก/ไม่ไปตามนัด = ถูกจัดท้ายคิว 1 รอบ และยังนับวันทำงาน<br>
+  อัปเดตอัตโนมัติทุกครั้งที่มีงานเข้า
+</footer>
+</body></html>
