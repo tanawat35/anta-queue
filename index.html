@@ -37,13 +37,12 @@
 <div class="list" id="list"></div>
 <div class="dock">
   <button id="go">ปล่อยลูก</button>
-  <div id="dbg" style="font-size:9px;color:#555;text-align:center"></div>
   <div class="hint" id="hint">กดปุ่มเพื่อปล่อย 17 ลูก — ลูกลงหลุมไหน = คิวที่นั้น</div>
 </div>
 <script>
 const DATA = [{"c": "#F45B69", "n": "มีนา เรืองศิริ", "d": 1.0, "t": 1}, {"c": "#76B041", "n": "ธนวัฒน์ หอมชื่น", "d": 1.5, "t": 1}, {"c": "#F45B69", "n": "ภาณุวัฒน์ ครึ้มค้างพลู", "d": 2.0, "t": 2}, {"c": "#EF476F", "n": "สัญชัย ศรีอินทร์จันทร์", "d": 3.0, "t": 3}, {"c": "#17BEBB", "n": "ธนูเดช เชื้อวงษ์", "d": 3.5, "t": 3}, {"c": "#A03E99", "n": "พีระยุทธ์ คำดี", "d": 4.5, "t": 4}, {"c": "#06D6A0", "n": "เลอสรรค์ โคขุนทด", "d": 8.5, "t": 7}, {"c": "#118AB2", "n": "สมบูรณ์ เครือยิหวา", "d": 15.5, "t": 14}, {"c": "#06D6A0", "n": "อัครินทร์ กุลศิริธนวัฒน์", "d": 24.5, "t": 22}, {"c": "#A03E99", "n": "ชาญวิทย์ ภู่พงษ์สิน", "d": 26.5, "t": 24}, {"c": "#F45B69", "n": "ศุภสิทธิ์ จันทร์สิน", "d": 26.5, "t": 23}, {"c": "#E4572E", "n": "วัลลภ บุตรดี", "d": 28.0, "t": 24}, {"c": "#06D6A0", "n": "บุญมาก ปริธรรมมา", "d": 30.0, "t": 26}, {"c": "#17BEBB", "n": "อาสือมั่น ตาเฮ", "d": 31.5, "t": 29}, {"c": "#EF476F", "n": "วันเฉลิม มงคลบุตร", "d": 47.5, "t": 43}, {"c": "#17BEBB", "n": "แสงทอง ด่านระหาร", "d": 55.0, "t": 47}, {"c": "#17BEBB", "n": "ปุณณวิช แสงใส", "d": 70.0, "t": 63}];
-window.onerror = function(m,src,l,c){var d=document.getElementById('dbg'); if(d) d.textContent='ERR '+m+' @'+l+':'+c;};
 const cv = document.getElementById('board'), ctx = cv.getContext('2d');
+const RAF = (fn) => setTimeout(fn, 16);
 const N = DATA.length;
 let W = 0, H = 0, dpr = Math.min(devicePixelRatio || 1, 2);
 let pegs = [], bins = [], balls = [], running = false, landed = 0;
@@ -121,8 +120,7 @@ function step() {
     g.addColorStop(0, '#ffffffdd'); g.addColorStop(.55, b.color); g.addColorStop(1, '#00000077');
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7); ctx.fillStyle = g; ctx.fill();
   }
-  const d=document.getElementById('dbg'); if(d) d.textContent='W='+W+' H='+H+' balls='+balls.length+' landed='+landed+' y='+(balls[0]?Math.round(balls[0].y):'-');
-  if (moving) requestAnimationFrame(step);
+  if (moving) RAF(step);
 }
 
 function release() {
@@ -133,7 +131,7 @@ function release() {
   balls = [];
   DATA.forEach((d, i) => setTimeout(() => {
     balls.push(newBall(i));
-    if (balls.length === 1) requestAnimationFrame(step);
+    if (balls.length === 1) RAF(step);
   }, i * 200));
   setTimeout(() => {
     document.getElementById('go').textContent = 'ปล่อยแล้ว';
