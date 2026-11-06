@@ -4,222 +4,321 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>คิว พขร. ANTA</title>
 <style>
-  :root { --bg:#0d1117; --panel:#161b22; --line:#243040; --txt:#e6edf3; --dim:#8b949e; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--txt);
-         font-family:-apple-system,"Segoe UI",Sarabun,"Noto Sans Thai",sans-serif; }
-  header { padding:18px 16px 6px; }
-  h1 { font-size:20px; margin:0 0 4px; }
+  :root { --bg:#0c1016; --panel:#151b24; --line:#232d3b; --txt:#e8eef5; --dim:#8794a3; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; background:radial-gradient(1200px 400px at 50% -120px,#1b2a3a,#0c1016 60%);
+         color:var(--txt); font-family:-apple-system,"Segoe UI",Sarabun,"Noto Sans Thai",sans-serif;
+         padding-bottom:96px; }
+  header { padding:20px 16px 4px; text-align:center; }
+  h1 { font-size:19px; margin:0 0 6px; letter-spacing:.3px; }
   .stamp { color:var(--dim); font-size:12px; }
-  section { padding:8px 16px 24px; }
-  h2 { font-size:15px; color:#7ee787; margin:18px 0 2px; letter-spacing:.5px; }
-  .next { color:var(--dim); font-size:13px; margin:4px 0 14px; }
-  .next b { color:var(--txt); }
-  .tower { display:flex; flex-direction:column; gap:8px; }
-  .slot { display:flex; align-items:center; gap:12px; background:var(--panel);
-           border:1px solid var(--line); border-radius:14px; padding:10px 12px;
-           animation:drop .55s cubic-bezier(.2,.9,.3,1.2) both;
-           animation-delay:calc(var(--i) * 70ms); }
-  @keyframes drop { from { transform:translateY(-26px); opacity:0; } to { transform:none; opacity:1; } }
-  .num { width:26px; text-align:right; color:var(--dim); font-weight:700; font-size:14px; }
-  .ball { width:38px; height:38px; border-radius:50%; background:radial-gradient(circle at 32% 28%, #ffffff55, var(--c) 62%);
-           display:grid; place-items:center; box-shadow:0 4px 12px #0006, inset 0 -3px 8px #0004;
-           animation:bounce .7s ease-out both; animation-delay:calc(var(--i) * 70ms + 260ms); }
-  @keyframes bounce { 0% { transform:scale(.4); } 60% { transform:scale(1.12); } 100% { transform:scale(1); } }
-  .ini { font-size:11px; font-weight:700; color:#0d1117; background:#ffffffc9;
+  .next { margin:14px 16px 4px; background:var(--panel); border:1px solid var(--line);
+           border-radius:14px; padding:10px 14px; font-size:13px; color:var(--dim); }
+  .next b { color:#7ee787; font-size:14px; }
+  .machine { margin:16px 14px 0; position:relative; }
+  .hopper { height:34px; margin:0 24px -10px; border-radius:0 0 18px 18px;
+             background:linear-gradient(#0f1620,#1c2635); border:1px solid var(--line);
+             border-top:none; display:flex; align-items:center; justify-content:center;
+             color:var(--dim); font-size:11px; letter-spacing:1px; }
+  .rows { display:flex; flex-direction:column; gap:8px; }
+  .row { display:flex; align-items:center; gap:12px; background:var(--panel);
+          border:1px solid var(--line); border-radius:16px; padding:8px 12px 8px 8px;
+          overflow:hidden; }
+  .rank { width:24px; text-align:right; color:var(--dim); font-weight:800; font-size:13px; }
+  .hole { position:relative; width:44px; height:44px; flex:none; border-radius:50%;
+           background:radial-gradient(circle at 50% 65%,#0a0e14,#111823 70%);
+           box-shadow:inset 0 3px 8px #000b, inset 0 -1px 0 #26313f; }
+  .ball { position:absolute; left:3px; top:3px; width:38px; height:38px; border-radius:50%;
+           background:radial-gradient(circle at 32% 28%, #ffffff66, var(--c) 62%);
+           box-shadow:0 6px 14px #0007, inset 0 -3px 8px #0005;
+           display:grid; place-items:center;
+           transform:translateY(-420px) scale(.55); opacity:0;
+           transition:transform .62s cubic-bezier(.34,1.32,.64,1), opacity .2s; }
+  .ball.drop { transform:none; opacity:1; }
+  .ball.settle { animation:settle .34s ease-out; }
+  @keyframes settle { 0% { transform:scale(1); } 45% { transform:scale(1.14,.9); }
+                       100% { transform:scale(1); } }
+  .ini { font-size:11px; font-weight:800; color:#0b0f14; background:#ffffffd0;
           border-radius:999px; padding:1px 5px; }
-  .info { min-width:0; }
-  .nm { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .meta { font-size:12px; color:var(--dim); }
-  .pen { font-size:10px; background:#7d2b2b; color:#ffb4b4; border-radius:6px; padding:1px 6px; margin-left:6px; }
-  footer { padding:0 16px 30px; color:var(--dim); font-size:12px; line-height:1.6; }
-  .bar { height:6px; border-radius:6px; background:linear-gradient(90deg,#2ea043,#d29922,#f85149); margin:10px 16px 0; opacity:.5; }
+  .label { min-width:0; opacity:0; transform:translateX(-6px);
+            transition:opacity .3s, transform .3s; }
+  .label.show { opacity:1; transform:none; }
+  .nm { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .meta { font-size:11.5px; color:var(--dim); }
+  .pen { font-size:10px; background:#7d2b2b; color:#ffb4b4; border-radius:6px; padding:1px 6px; }
+  .dock { position:fixed; left:0; right:0; bottom:0; padding:12px 16px 18px;
+           background:linear-gradient(#0c101600,#0c1016ee 38%); text-align:center; }
+  button { width:100%; max-width:420px; padding:15px; border:0; border-radius:16px;
+            font:700 16px inherit; color:#06210f; background:linear-gradient(#5ee08a,#2ea043);
+            box-shadow:0 8px 22px #2ea04344; }
+  button:disabled { filter:grayscale(.5) brightness(.7); box-shadow:none; }
+  .count { margin-top:8px; font-size:12px; color:var(--dim); min-height:16px; }
+  footer { padding:22px 18px 6px; color:var(--dim); font-size:11.5px; line-height:1.7; text-align:center; }
 </style></head>
 <body>
 <header>
   <h1>คิวงาน พขร. ANTA</h1>
-  <div class="stamp">อัปเดต 06/11/2026 19:20 · นับย้อนหลัง 30 วัน · ยิ่งสะสมน้อย ยิ่งได้งานก่อน</div>
-  <div class="bar"></div>
+  <div class="stamp">ข้อมูล 06/11/2026 19:20 · นับย้อนหลัง 30 วัน</div>
 </header>
+<div class="next">คิวถัดไป <b>มีนา → ธนวัฒน์ → ภาณุวัฒน์</b></div>
 
-    <section>
-      <h2>คิว 4W</h2>
-      <p class="next">คิวถัดไป: <b>มีนา → ธนวัฒน์ → ภาณุวัฒน์</b></p>
-      <div class="tower">
-      <div class="slot" style="--i:1">
-        <div class="num">1</div>
-        <div class="ball" style="--c:#A03E99">
+<div class="machine">
+  <div class="hopper">17 ลูกในเครื่อง</div>
+  <div class="rows">
+    <div class="row">
+      <div class="rank">1</div>
+      <div class="hole">
+        <div class="ball" style="--c:#A03E99;--d:130ms">
           <span class="ini">มีนา</span>
         </div>
-        <div class="info">
-          <div class="nm">มีนา เรืองศิริ </div>
-          <div class="meta">1 วัน · 1 เที่ยว · ล่าสุด 23/10</div>
-        </div>
       </div>
-      <div class="slot" style="--i:2">
-        <div class="num">2</div>
-        <div class="ball" style="--c:#3D5A80">
+      <div class="label">
+        <div class="nm">มีนา เรืองศิริ </div>
+        <div class="meta">1 วัน · 1 เที่ยว · ล่าสุด 23/10</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">2</div>
+      <div class="hole">
+        <div class="ball" style="--c:#3D5A80;--d:260ms">
           <span class="ini">ธนวั</span>
         </div>
-        <div class="info">
-          <div class="nm">ธนวัฒน์ หอมชื่น </div>
-          <div class="meta">1.5 วัน · 1 เที่ยว · ล่าสุด 30/10</div>
-        </div>
       </div>
-      <div class="slot" style="--i:3">
-        <div class="num">3</div>
-        <div class="ball" style="--c:#FFC914">
+      <div class="label">
+        <div class="nm">ธนวัฒน์ หอมชื่น </div>
+        <div class="meta">1.5 วัน · 1 เที่ยว · ล่าสุด 30/10</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">3</div>
+      <div class="hole">
+        <div class="ball" style="--c:#FFC914;--d:390ms">
           <span class="ini">ภาณุ</span>
         </div>
-        <div class="info">
-          <div class="nm">ภาณุวัฒน์ ครึ้มค้างพลู </div>
-          <div class="meta">2 วัน · 2 เที่ยว · ล่าสุด 03/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:4">
-        <div class="num">4</div>
-        <div class="ball" style="--c:#F45B69">
+      <div class="label">
+        <div class="nm">ภาณุวัฒน์ ครึ้มค้างพลู </div>
+        <div class="meta">2 วัน · 2 เที่ยว · ล่าสุด 03/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">4</div>
+      <div class="hole">
+        <div class="ball" style="--c:#F45B69;--d:520ms">
           <span class="ini">สัญช</span>
         </div>
-        <div class="info">
-          <div class="nm">สัญชัย ศรีอินทร์จันทร์ </div>
-          <div class="meta">3 วัน · 3 เที่ยว · ล่าสุด 22/10</div>
-        </div>
       </div>
-      <div class="slot" style="--i:5">
-        <div class="num">5</div>
-        <div class="ball" style="--c:#D4A017">
+      <div class="label">
+        <div class="nm">สัญชัย ศรีอินทร์จันทร์ </div>
+        <div class="meta">3 วัน · 3 เที่ยว · ล่าสุด 22/10</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">5</div>
+      <div class="hole">
+        <div class="ball" style="--c:#D4A017;--d:650ms">
           <span class="ini">ธนูเ</span>
         </div>
-        <div class="info">
-          <div class="nm">ธนูเดช เชื้อวงษ์ </div>
-          <div class="meta">3.5 วัน · 3 เที่ยว · ล่าสุด 22/10</div>
-        </div>
       </div>
-      <div class="slot" style="--i:6">
-        <div class="num">6</div>
-        <div class="ball" style="--c:#76B041">
+      <div class="label">
+        <div class="nm">ธนูเดช เชื้อวงษ์ </div>
+        <div class="meta">3.5 วัน · 3 เที่ยว · ล่าสุด 22/10</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">6</div>
+      <div class="hole">
+        <div class="ball" style="--c:#76B041;--d:780ms">
           <span class="ini">พีระ</span>
         </div>
-        <div class="info">
-          <div class="nm">พีระยุทธ์ คำดี </div>
-          <div class="meta">4.5 วัน · 4 เที่ยว · ล่าสุด 29/10</div>
-        </div>
       </div>
-      <div class="slot" style="--i:7">
-        <div class="num">7</div>
-        <div class="ball" style="--c:#A03E99">
+      <div class="label">
+        <div class="nm">พีระยุทธ์ คำดี </div>
+        <div class="meta">4.5 วัน · 4 เที่ยว · ล่าสุด 29/10</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">7</div>
+      <div class="hole">
+        <div class="ball" style="--c:#A03E99;--d:910ms">
           <span class="ini">เลอส</span>
         </div>
-        <div class="info">
-          <div class="nm">เลอสรรค์ โคขุนทด </div>
-          <div class="meta">8.5 วัน · 7 เที่ยว · ล่าสุด 05/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:8">
-        <div class="num">8</div>
-        <div class="ball" style="--c:#B56576">
+      <div class="label">
+        <div class="nm">เลอสรรค์ โคขุนทด </div>
+        <div class="meta">8.5 วัน · 7 เที่ยว · ล่าสุด 05/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">8</div>
+      <div class="hole">
+        <div class="ball" style="--c:#B56576;--d:1040ms">
           <span class="ini">สมบู</span>
         </div>
-        <div class="info">
-          <div class="nm">สมบูรณ์ เครือยิหวา </div>
-          <div class="meta">15.5 วัน · 14 เที่ยว · ล่าสุด 04/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:9">
-        <div class="num">9</div>
-        <div class="ball" style="--c:#2E86AB">
+      <div class="label">
+        <div class="nm">สมบูรณ์ เครือยิหวา </div>
+        <div class="meta">15.5 วัน · 14 เที่ยว · ล่าสุด 04/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">9</div>
+      <div class="hole">
+        <div class="ball" style="--c:#2E86AB;--d:1170ms">
           <span class="ini">อัคร</span>
         </div>
-        <div class="info">
-          <div class="nm">อัครินทร์ กุลศิริธนวัฒน์ </div>
-          <div class="meta">24.5 วัน · 22 เที่ยว · ล่าสุด 05/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:10">
-        <div class="num">10</div>
-        <div class="ball" style="--c:#F45B69">
+      <div class="label">
+        <div class="nm">อัครินทร์ กุลศิริธนวัฒน์ </div>
+        <div class="meta">24.5 วัน · 22 เที่ยว · ล่าสุด 05/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">10</div>
+      <div class="hole">
+        <div class="ball" style="--c:#F45B69;--d:1300ms">
           <span class="ini">ชาญว</span>
         </div>
-        <div class="info">
-          <div class="nm">ชาญวิทย์ ภู่พงษ์สิน </div>
-          <div class="meta">26.5 วัน · 24 เที่ยว · ล่าสุด 02/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:11">
-        <div class="num">11</div>
-        <div class="ball" style="--c:#5C7AEA">
+      <div class="label">
+        <div class="nm">ชาญวิทย์ ภู่พงษ์สิน </div>
+        <div class="meta">26.5 วัน · 24 เที่ยว · ล่าสุด 02/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">11</div>
+      <div class="hole">
+        <div class="ball" style="--c:#5C7AEA;--d:1430ms">
           <span class="ini">ศุภส</span>
         </div>
-        <div class="info">
-          <div class="nm">ศุภสิทธิ์ จันทร์สิน </div>
-          <div class="meta">26.5 วัน · 23 เที่ยว · ล่าสุด 05/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:12">
-        <div class="num">12</div>
-        <div class="ball" style="--c:#5C7AEA">
+      <div class="label">
+        <div class="nm">ศุภสิทธิ์ จันทร์สิน </div>
+        <div class="meta">26.5 วัน · 23 เที่ยว · ล่าสุด 05/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">12</div>
+      <div class="hole">
+        <div class="ball" style="--c:#5C7AEA;--d:1560ms">
           <span class="ini">วัลล</span>
         </div>
-        <div class="info">
-          <div class="nm">วัลลภ บุตรดี </div>
-          <div class="meta">28 วัน · 24 เที่ยว · ล่าสุด 05/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:13">
-        <div class="num">13</div>
-        <div class="ball" style="--c:#FFC914">
+      <div class="label">
+        <div class="nm">วัลลภ บุตรดี </div>
+        <div class="meta">28 วัน · 24 เที่ยว · ล่าสุด 05/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">13</div>
+      <div class="hole">
+        <div class="ball" style="--c:#FFC914;--d:1690ms">
           <span class="ini">บุญม</span>
         </div>
-        <div class="info">
-          <div class="nm">บุญมาก ปริธรรมมา </div>
-          <div class="meta">30 วัน · 26 เที่ยว · ล่าสุด 30/10</div>
-        </div>
       </div>
-      <div class="slot" style="--i:14">
-        <div class="num">14</div>
-        <div class="ball" style="--c:#2E86AB">
+      <div class="label">
+        <div class="nm">บุญมาก ปริธรรมมา </div>
+        <div class="meta">30 วัน · 26 เที่ยว · ล่าสุด 30/10</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">14</div>
+      <div class="hole">
+        <div class="ball" style="--c:#2E86AB;--d:1820ms">
           <span class="ini">อาสื</span>
         </div>
-        <div class="info">
-          <div class="nm">อาสือมั่น ตาเฮ </div>
-          <div class="meta">31.5 วัน · 29 เที่ยว · ล่าสุด 05/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:15">
-        <div class="num">15</div>
-        <div class="ball" style="--c:#E4572E">
+      <div class="label">
+        <div class="nm">อาสือมั่น ตาเฮ </div>
+        <div class="meta">31.5 วัน · 29 เที่ยว · ล่าสุด 05/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">15</div>
+      <div class="hole">
+        <div class="ball" style="--c:#E4572E;--d:1950ms">
           <span class="ini">วันเ</span>
         </div>
-        <div class="info">
-          <div class="nm">วันเฉลิม มงคลบุตร </div>
-          <div class="meta">47.5 วัน · 43 เที่ยว · ล่าสุด 06/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:16">
-        <div class="num">16</div>
-        <div class="ball" style="--c:#F45B69">
+      <div class="label">
+        <div class="nm">วันเฉลิม มงคลบุตร </div>
+        <div class="meta">47.5 วัน · 43 เที่ยว · ล่าสุด 06/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">16</div>
+      <div class="hole">
+        <div class="ball" style="--c:#F45B69;--d:2080ms">
           <span class="ini">แสงท</span>
         </div>
-        <div class="info">
-          <div class="nm">แสงทอง ด่านระหาร </div>
-          <div class="meta">55 วัน · 47 เที่ยว · ล่าสุด 05/11</div>
-        </div>
       </div>
-      <div class="slot" style="--i:17">
-        <div class="num">17</div>
-        <div class="ball" style="--c:#5C7AEA">
+      <div class="label">
+        <div class="nm">แสงทอง ด่านระหาร </div>
+        <div class="meta">55 วัน · 47 เที่ยว · ล่าสุด 05/11</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="rank">17</div>
+      <div class="hole">
+        <div class="ball" style="--c:#5C7AEA;--d:2210ms">
           <span class="ini">ปุณณ</span>
         </div>
-        <div class="info">
-          <div class="nm">ปุณณวิช แสงใส </div>
-          <div class="meta">70 วัน · 63 เที่ยว · ล่าสุด 06/11</div>
-        </div>
-      </div></div>
-    </section>
+      </div>
+      <div class="label">
+        <div class="nm">ปุณณวิช แสงใส </div>
+        <div class="meta">70 วัน · 63 เที่ยว · ล่าสุด 06/11</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
-  ลูกบอลสี = คนขับ 1 คน · ตัวเลขในช่อง = ลำดับคิว<br>
-  ยกเลิก/ไม่ไปตามนัด = ถูกจัดท้ายคิว 1 รอบ และยังนับวันทำงาน<br>
-  อัปเดตอัตโนมัติทุกครั้งที่มีงานเข้า
+  ลูก 1 ลูก = คนขับ 1 คน · หลุม 1 หลุม = 1 ลำดับ (ลูกที่ร่วงลงหลุมไหน = คิวที่นั้น)<br>
+  ยิ่งวันสะสมน้อย ยิ่งอยู่บน · ยกเลิก/ไม่ไปตามนัด = ท้ายคิว 1 รอบ
 </footer>
+
+<div class="dock">
+  <button id="go">ปล่อยลูก</button>
+  <div class="count" id="cd"></div>
+</div>
+
+<script>
+const AT = null;
+const balls = [...document.querySelectorAll('.ball')];
+const labels = [...document.querySelectorAll('.label')];
+let done = false;
+
+function release() {
+  if (done) return;
+  done = true;
+  document.getElementById('go').disabled = true;
+  document.getElementById('go').textContent = 'ปล่อยแล้ว';
+  balls.forEach((b, i) => {
+    const d = parseInt(getComputedStyle(b).getPropertyValue('--d')) || i * 130;
+    setTimeout(() => {
+      b.classList.add('drop');
+      setTimeout(() => b.classList.add('settle'), 620);
+      setTimeout(() => labels[i] && labels[i].classList.add('show'), 420);
+    }, d);
+  });
+  setTimeout(() => { document.getElementById('cd').textContent = 'ลำดับนี้ใช้ทั้งวัน จนกว่าจะมีงานใหม่เข้ามา'; },
+             balls.length * 130 + 900);
+}
+
+document.getElementById('go').addEventListener('click', release);
+
+if (AT) {
+  const cd = document.getElementById('cd');
+  const tick = () => {
+    const left = AT - Date.now();
+    if (left <= 0) { cd.textContent = 'เริ่มปล่อยลูก'; release(); return; }
+    const m = Math.floor(left / 60000), s = Math.floor(left % 60000 / 1000);
+    cd.textContent = 'ปล่อยอัตโนมัติใน ' + m + ':' + String(s).padStart(2, '0');
+    setTimeout(tick, 500);
+  };
+  tick();
+} else {
+  setTimeout(release, 700);
+}
+</script>
 </body></html>
