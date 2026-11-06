@@ -6,26 +6,53 @@
 <style>
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body { margin:0; height:100%; }
-  body { background:radial-gradient(120% 60% at 50% 0%, #3a0d1f 0%, #1a0710 45%, #07040a 100%);
+  body { background:radial-gradient(120% 60% at 50% 0%,#3a0d1f 0%,#1a0710 45%,#07040a 100%);
          color:#f6eef2; font-family:-apple-system,"Segoe UI",Sarabun,"Noto Sans Thai",sans-serif;
-         display:flex; flex-direction:column; min-height:100dvh; overflow-x:hidden; }
-  header { padding:12px 14px 4px; text-align:center; }
-  h1 { font-size:16px; margin:0; letter-spacing:.4px; color:#ffd9e4; }
+         display:flex; flex-direction:column; min-height:100dvh; }
+  header { padding:12px 14px 2px; text-align:center; }
+  h1 { font-size:16px; margin:0; color:#ffd9e4; letter-spacing:.4px; }
   .stamp { font-size:11px; color:#bb8fa1; margin-top:3px; }
-  #board { display:block; width:100%; flex:1 1 auto; min-height:48vh; }
-  .list { padding:4px 10px; display:grid; grid-template-columns:1fr 1fr; gap:4px 8px; }
-  .item { display:flex; align-items:center; gap:6px; font-size:11.5px; padding:4px 6px;
-           border-radius:8px; background:#ffffff0d; opacity:.18; transform:translateY(4px);
-           transition:opacity .25s, transform .25s; }
-  .item.on { opacity:1; transform:none; background:#ffffff1c; }
-  .dot { width:11px; height:11px; border-radius:50%; flex:none; }
-  .rk { color:#ffb3c9; font-weight:800; font-size:10.5px; min-width:14px; }
-  .who { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .dock { padding:6px 14px calc(10px + env(safe-area-inset-bottom)); }
+  #board { flex:1 1 auto; min-height:44vh; margin:8px 6px 0; padding:10px 4px 6px;
+            display:flex; gap:2px; border-radius:14px;
+            background:
+              radial-gradient(circle at 50% 8%, #ffffff10, transparent 60%),
+              repeating-linear-gradient(0deg,#ffffff08 0 1px,transparent 1px 26px),
+              repeating-linear-gradient(90deg,#ffffff06 0 1px,transparent 1px 22px),
+              linear-gradient(#120711,#0a0409);
+            box-shadow:inset 0 0 40px #0008, 0 0 0 1px #ffffff12; overflow:hidden; }
+  .lane { flex:1 1 0; display:flex; flex-direction:column; align-items:center; min-width:0; }
+  .track { flex:1 1 auto; width:100%; display:flex; flex-direction:column;
+            align-items:center; justify-content:flex-end; padding-bottom:3px;
+            background:radial-gradient(circle at 50% 12%, #ffffff0d, transparent 70%); }
+  .ball { width:78%; max-width:24px; aspect-ratio:1; border-radius:50%;
+           background:radial-gradient(circle at 32% 28%,#ffffffcc,var(--c) 62%,#00000066);
+           box-shadow:0 6px 14px #000a, inset 0 -3px 8px #0006;
+           display:grid; place-items:center; font-size:9px; font-weight:800; color:#12060c;
+           opacity:0; transform:translateY(-300px);
+           animation:drop .8s cubic-bezier(.3,1.25,.55,1) both;
+           animation-delay:var(--d); animation-play-state:paused; }
+  .ball span { background:#ffffffc9; border-radius:999px; padding:0 3px; }
+  .lane.go .ball { animation-play-state:running; }
+  @keyframes drop { 0% { transform:translateY(-300px) scale(.7); opacity:0; }
+                     60% { transform:translateY(0) scale(1.06); opacity:1; }
+                     100% { transform:none; opacity:1; } }
+  .hole { width:100%; height:22px; border-radius:5px; background:#00000066;
+           box-shadow:inset 0 3px 8px #000, inset 0 -1px 0 #ffffff1a;
+           display:grid; place-items:center; font-size:9px; font-weight:700; color:#ffffff77; }
+  .cap { width:86%; height:6px; border-radius:0 0 6px 6px; margin-bottom:2px;
+          background:linear-gradient(#ffd166,#ff9f1c); opacity:.35; }
+  .list { padding:6px 10px 2px; display:grid; grid-template-columns:1fr 1fr; gap:4px 8px; }
+  .item { display:flex; align-items:center; gap:5px; font-size:11px; padding:3px 6px;
+           border-radius:8px; background:#ffffff0d; opacity:.2; transition:opacity .3s, background .3s; }
+  .item.on { opacity:1; background:#ffffff1c; }
+  .item b { color:#ffb3c9; font-size:10px; }
+  .dot { width:9px; height:9px; border-radius:50%; flex:none; }
+  .who { flex:1 1 auto; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .meta { color:#a98899; font-size:10px; }
+  .dock { padding:8px 14px calc(10px + env(safe-area-inset-bottom)); }
   button { width:100%; padding:15px; border:0; border-radius:16px; font:800 17px inherit;
-            color:#2a0710; background:linear-gradient(#ffd166,#ff9f1c);
-            box-shadow:0 10px 24px #ff9f1c55; }
-  button:disabled { filter:brightness(.62) saturate(.6); box-shadow:none; }
+            color:#2a0710; background:linear-gradient(#ffd166,#ff9f1c); box-shadow:0 10px 24px #ff9f1c55; }
+  button:disabled { filter:brightness(.6) saturate(.6); box-shadow:none; }
   .hint { text-align:center; font-size:11px; color:#a98899; margin-top:6px; min-height:14px; }
 </style></head>
 <body>
@@ -33,127 +60,153 @@
   <h1>คิวงาน พขร. ANTA</h1>
   <div class="stamp">ข้อมูล 06/11/2026 19:48 · นับย้อนหลัง 30 วัน · 17 คน</div>
 </header>
-<canvas id="board"></canvas>
-<div class="list" id="list"></div>
+<div id="board">
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#F45B69;--d:120ms"><span>1</span></div>
+      </div>
+      <div class="hole"><span>1</span></div>
+      <div class="cap" title="มีนา เรืองศิริ"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#76B041;--d:240ms"><span>2</span></div>
+      </div>
+      <div class="hole"><span>2</span></div>
+      <div class="cap" title="ธนวัฒน์ หอมชื่น"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#F45B69;--d:360ms"><span>3</span></div>
+      </div>
+      <div class="hole"><span>3</span></div>
+      <div class="cap" title="ภาณุวัฒน์ ครึ้มค้างพลู"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#EF476F;--d:480ms"><span>4</span></div>
+      </div>
+      <div class="hole"><span>4</span></div>
+      <div class="cap" title="สัญชัย ศรีอินทร์จันทร์"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#17BEBB;--d:600ms"><span>5</span></div>
+      </div>
+      <div class="hole"><span>5</span></div>
+      <div class="cap" title="ธนูเดช เชื้อวงษ์"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#A03E99;--d:720ms"><span>6</span></div>
+      </div>
+      <div class="hole"><span>6</span></div>
+      <div class="cap" title="พีระยุทธ์ คำดี"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#06D6A0;--d:840ms"><span>7</span></div>
+      </div>
+      <div class="hole"><span>7</span></div>
+      <div class="cap" title="เลอสรรค์ โคขุนทด"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#118AB2;--d:960ms"><span>8</span></div>
+      </div>
+      <div class="hole"><span>8</span></div>
+      <div class="cap" title="สมบูรณ์ เครือยิหวา"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#06D6A0;--d:1080ms"><span>9</span></div>
+      </div>
+      <div class="hole"><span>9</span></div>
+      <div class="cap" title="อัครินทร์ กุลศิริธนวัฒน์"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#A03E99;--d:1200ms"><span>10</span></div>
+      </div>
+      <div class="hole"><span>10</span></div>
+      <div class="cap" title="ชาญวิทย์ ภู่พงษ์สิน"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#F45B69;--d:1320ms"><span>11</span></div>
+      </div>
+      <div class="hole"><span>11</span></div>
+      <div class="cap" title="ศุภสิทธิ์ จันทร์สิน"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#E4572E;--d:1440ms"><span>12</span></div>
+      </div>
+      <div class="hole"><span>12</span></div>
+      <div class="cap" title="วัลลภ บุตรดี"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#06D6A0;--d:1560ms"><span>13</span></div>
+      </div>
+      <div class="hole"><span>13</span></div>
+      <div class="cap" title="บุญมาก ปริธรรมมา"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#17BEBB;--d:1680ms"><span>14</span></div>
+      </div>
+      <div class="hole"><span>14</span></div>
+      <div class="cap" title="อาสือมั่น ตาเฮ"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#EF476F;--d:1800ms"><span>15</span></div>
+      </div>
+      <div class="hole"><span>15</span></div>
+      <div class="cap" title="วันเฉลิม มงคลบุตร"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#17BEBB;--d:1920ms"><span>16</span></div>
+      </div>
+      <div class="hole"><span>16</span></div>
+      <div class="cap" title="แสงทอง ด่านระหาร"></div>
+    </div>
+    <div class="lane">
+      <div class="track">
+        <div class="ball" style="--c:#17BEBB;--d:2040ms"><span>17</span></div>
+      </div>
+      <div class="hole"><span>17</span></div>
+      <div class="cap" title="ปุณณวิช แสงใส"></div>
+    </div>
+</div>
+<div class="list"><div class="item" id="it0"><b>1</b><span class="dot" style="background:#F45B69"></span><span class="who">มีนา เรืองศิริ</span><span class="meta">1 วัน</span></div><div class="item" id="it1"><b>2</b><span class="dot" style="background:#76B041"></span><span class="who">ธนวัฒน์ หอมชื่น</span><span class="meta">1.5 วัน</span></div><div class="item" id="it2"><b>3</b><span class="dot" style="background:#F45B69"></span><span class="who">ภาณุวัฒน์ ครึ้มค้างพลู</span><span class="meta">2 วัน</span></div><div class="item" id="it3"><b>4</b><span class="dot" style="background:#EF476F"></span><span class="who">สัญชัย ศรีอินทร์จันทร์</span><span class="meta">3 วัน</span></div><div class="item" id="it4"><b>5</b><span class="dot" style="background:#17BEBB"></span><span class="who">ธนูเดช เชื้อวงษ์</span><span class="meta">3.5 วัน</span></div><div class="item" id="it5"><b>6</b><span class="dot" style="background:#A03E99"></span><span class="who">พีระยุทธ์ คำดี</span><span class="meta">4.5 วัน</span></div><div class="item" id="it6"><b>7</b><span class="dot" style="background:#06D6A0"></span><span class="who">เลอสรรค์ โคขุนทด</span><span class="meta">8.5 วัน</span></div><div class="item" id="it7"><b>8</b><span class="dot" style="background:#118AB2"></span><span class="who">สมบูรณ์ เครือยิหวา</span><span class="meta">15.5 วัน</span></div><div class="item" id="it8"><b>9</b><span class="dot" style="background:#06D6A0"></span><span class="who">อัครินทร์ กุลศิริธนวัฒน์</span><span class="meta">24.5 วัน</span></div><div class="item" id="it9"><b>10</b><span class="dot" style="background:#A03E99"></span><span class="who">ชาญวิทย์ ภู่พงษ์สิน</span><span class="meta">26.5 วัน</span></div><div class="item" id="it10"><b>11</b><span class="dot" style="background:#F45B69"></span><span class="who">ศุภสิทธิ์ จันทร์สิน</span><span class="meta">26.5 วัน</span></div><div class="item" id="it11"><b>12</b><span class="dot" style="background:#E4572E"></span><span class="who">วัลลภ บุตรดี</span><span class="meta">28 วัน</span></div><div class="item" id="it12"><b>13</b><span class="dot" style="background:#06D6A0"></span><span class="who">บุญมาก ปริธรรมมา</span><span class="meta">30 วัน</span></div><div class="item" id="it13"><b>14</b><span class="dot" style="background:#17BEBB"></span><span class="who">อาสือมั่น ตาเฮ</span><span class="meta">31.5 วัน</span></div><div class="item" id="it14"><b>15</b><span class="dot" style="background:#EF476F"></span><span class="who">วันเฉลิม มงคลบุตร</span><span class="meta">47.5 วัน</span></div><div class="item" id="it15"><b>16</b><span class="dot" style="background:#17BEBB"></span><span class="who">แสงทอง ด่านระหาร</span><span class="meta">55 วัน</span></div><div class="item" id="it16"><b>17</b><span class="dot" style="background:#17BEBB"></span><span class="who">ปุณณวิช แสงใส</span><span class="meta">70 วัน</span></div></div>
 <div class="dock">
   <button id="go">ปล่อยลูก</button>
-  <div id="cnt" style="text-align:center;font-size:10px;color:#666"></div>
   <div class="hint" id="hint">กดปุ่มเพื่อปล่อย 17 ลูก — ลูกลงหลุมไหน = คิวที่นั้น</div>
 </div>
 <script>
-const DATA = [{"c": "#F45B69", "n": "มีนา เรืองศิริ", "d": 1.0, "t": 1}, {"c": "#76B041", "n": "ธนวัฒน์ หอมชื่น", "d": 1.5, "t": 1}, {"c": "#F45B69", "n": "ภาณุวัฒน์ ครึ้มค้างพลู", "d": 2.0, "t": 2}, {"c": "#EF476F", "n": "สัญชัย ศรีอินทร์จันทร์", "d": 3.0, "t": 3}, {"c": "#17BEBB", "n": "ธนูเดช เชื้อวงษ์", "d": 3.5, "t": 3}, {"c": "#A03E99", "n": "พีระยุทธ์ คำดี", "d": 4.5, "t": 4}, {"c": "#06D6A0", "n": "เลอสรรค์ โคขุนทด", "d": 8.5, "t": 7}, {"c": "#118AB2", "n": "สมบูรณ์ เครือยิหวา", "d": 15.5, "t": 14}, {"c": "#06D6A0", "n": "อัครินทร์ กุลศิริธนวัฒน์", "d": 24.5, "t": 22}, {"c": "#A03E99", "n": "ชาญวิทย์ ภู่พงษ์สิน", "d": 26.5, "t": 24}, {"c": "#F45B69", "n": "ศุภสิทธิ์ จันทร์สิน", "d": 26.5, "t": 23}, {"c": "#E4572E", "n": "วัลลภ บุตรดี", "d": 28.0, "t": 24}, {"c": "#06D6A0", "n": "บุญมาก ปริธรรมมา", "d": 30.0, "t": 26}, {"c": "#17BEBB", "n": "อาสือมั่น ตาเฮ", "d": 31.5, "t": 29}, {"c": "#EF476F", "n": "วันเฉลิม มงคลบุตร", "d": 47.5, "t": 43}, {"c": "#17BEBB", "n": "แสงทอง ด่านระหาร", "d": 55.0, "t": 47}, {"c": "#17BEBB", "n": "ปุณณวิช แสงใส", "d": 70.0, "t": 63}];
-const cv = document.getElementById('board'), ctx = cv.getContext('2d');
-const RAF = (fn) => setTimeout(fn, 16);
-const N = DATA.length;
-let W = 0, H = 0, dpr = Math.min(devicePixelRatio || 1, 2);
-let pegs = [], bins = [], balls = [], running = false, landed = 0;
-
-function layout(retry) {
-  W = cv.clientWidth; H = cv.clientHeight;
-  if ((H < 120 || W < 100) && (retry || 0) < 8) { setTimeout(function(){ layout((retry||0)+1); }, 120); return; }
-  cv.width = W * dpr; cv.height = H * dpr;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const laneW = W / N;
-  pegs = [];
-  const rowsN = Math.max(6, Math.floor(H / 44));
-  for (let r = 0; r < rowsN; r++) {
-    const y = H * 0.14 + r * ((H * 0.66) / rowsN);
-    const off = (r % 2) ? laneW / 2 : 0;
-    for (let x = off + laneW / 2; x < W; x += laneW) pegs.push({x: x, y: y, r: 2.3});
-  }
-  bins = [];
-  for (let i = 0; i < N; i++) bins.push({x: i * laneW + laneW / 2, y: H - 26, w: laneW});
-}
-
-function newBall(i) {
-  const laneW = W / N, target = i * laneW + laneW / 2;
-  return {x: target + (Math.random() - 0.5) * laneW * 0.4, y: -24 - i * 16, vx: 0, vy: 0,
-           r: Math.max(5.5, Math.min(8.5, laneW * 0.38)), color: DATA[i].c, idx: i,
-           target: target, done: false};
-}
-
-function drawStatic() {
-  for (const p of pegs) {
-    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7);
-    ctx.fillStyle = 'rgba(255,255,255,.45)'; ctx.fill();
-  }
-  for (let i = 0; i < N; i++) {
-    const b = bins[i], w = Math.max(10, b.w - 2);
-    ctx.fillStyle = 'rgba(255,255,255,.09)';
-    ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(b.x - w / 2, b.y - 12, w, 22, 6); else ctx.rect(b.x - w / 2, b.y - 12, w, 22);
-    ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.6)';
-    ctx.font = '700 ' + Math.max(8, Math.min(11, W / N * 0.52)) + 'px sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(String(i + 1), b.x, b.y);
-  }
-}
-
-function step() {
-  ctx.clearRect(0, 0, W, H);
-  drawStatic();
-  let moving = false;
-  for (const b of balls) {
-    if (!b.done) {
-      moving = true;
-      b.vy += 0.4;
-      b.vx = b.vx * 0.985 + (b.target - b.x) * 0.0024;
-      for (const p of pegs) {
-        const dx = b.x - p.x, dy = b.y - p.y, d2 = dx * dx + dy * dy, rr = b.r + p.r;
-        if (d2 < rr * rr) {
-          const d = Math.sqrt(d2) || 1, nx = dx / d, ny = dy / d;
-          b.x = p.x + nx * rr; b.y = p.y + ny * rr;
-          const dot = b.vx * nx + b.vy * ny;
-          b.vx = (b.vx - 2 * dot * nx) * 0.6 + (Math.random() - 0.5) * 0.5;
-          b.vy = (b.vy - 2 * dot * ny) * 0.6;
+var lanes=[].slice.call(document.querySelectorAll('.lane'));
+var items=[].slice.call(document.querySelectorAll('.item'));
+var started=false;
+function release(){
+  if(started) return; started=true;
+  var btn=document.getElementById('go'); btn.disabled=true; btn.textContent='กำลังปล่อย…';
+  lanes.forEach(function(l,i){
+    setTimeout(function(){
+      l.classList.add('go');
+      setTimeout(function(){
+        if(items[i]) items[i].classList.add('on');
+        if(i===lanes.length-1){
+          btn.textContent='ปล่อยแล้ว';
+          document.getElementById('hint').textContent='ลำดับนี้คือลำดับตั้งต้นของรอบ';
         }
-      }
-      b.x += b.vx; b.y += b.vy;
-      b.x = Math.max(b.r, Math.min(W - b.r, b.x));
-      if (b.y >= bins[b.idx].y - 13) {
-        b.y = bins[b.idx].y - 13; b.done = true; landed++;
-        var _c=document.getElementById('cnt'); if(_c){var r=cv.getBoundingClientRect(); _c.textContent='landed '+landed+'/'+N+' W='+W+' H='+H+' rect='+Math.round(r.top)+','+Math.round(r.height);}
-        if (landed === N) document.title = 'DONE ' + N;
-        const el = document.getElementById('it' + b.idx);
-        if (el) el.classList.add('on');
-      }
-    }
-    const g = ctx.createRadialGradient(b.x - b.r * .35, b.y - b.r * .4, 1, b.x, b.y, b.r);
-    g.addColorStop(0, '#ffffffdd'); g.addColorStop(.55, b.color); g.addColorStop(1, '#00000077');
-    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7); ctx.fillStyle = g; ctx.fill();
-  }
-  if (moving) RAF(step);
+      }, 640);
+    }, i*130);
+  });
 }
-
-function release() {
-  if (running) return;
-  running = true;
-  document.getElementById('go').disabled = true;
-  document.getElementById('go').textContent = 'กำลังปล่อย…';
-  balls = [];
-  DATA.forEach((d, i) => setTimeout(() => {
-    balls.push(newBall(i));
-    if (balls.length === 1) RAF(step);
-  }, i * 200));
-  setTimeout(() => {
-    document.getElementById('go').textContent = 'ปล่อยแล้ว';
-    document.getElementById('hint').textContent = 'ลำดับนี้คือลำดับตั้งต้นของรอบ';
-  }, DATA.length * 200 + 1200);
-}
-
-document.getElementById('list').innerHTML = DATA.map((d, i) =>
-  '<div class="item" id="it' + i + '"><span class="rk">' + (i + 1) + '</span>' +
-  '<span class="dot" style="background:' + d.c + '"></span>' +
-  '<span class="who">' + d.n + '</span></div>').join('');
-
 document.getElementById('go').addEventListener('click', release);
-window.addEventListener('resize', () => { layout(); if (!running) { balls = []; step(); } });
-layout();
-step();
-setTimeout(function(){ layout(); if (!running) { balls = []; step(); } }, 350);
-window.addEventListener('load', function(){ layout(); if (!running) { balls = []; step(); } });
-document.getElementById('cnt') && (document.getElementById('cnt').textContent='H='+H+' W='+W);
 setTimeout(release, 700);
 </script>
 </body></html>
