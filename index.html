@@ -37,6 +37,7 @@
 <div class="list" id="list"></div>
 <div class="dock">
   <button id="go">ปล่อยลูก</button>
+  <div id="cnt" style="text-align:center;font-size:10px;color:#666"></div>
   <div class="hint" id="hint">กดปุ่มเพื่อปล่อย 17 ลูก — ลูกลงหลุมไหน = คิวที่นั้น</div>
 </div>
 <script>
@@ -47,8 +48,9 @@ const N = DATA.length;
 let W = 0, H = 0, dpr = Math.min(devicePixelRatio || 1, 2);
 let pegs = [], bins = [], balls = [], running = false, landed = 0;
 
-function layout() {
+function layout(retry) {
   W = cv.clientWidth; H = cv.clientHeight;
+  if ((H < 120 || W < 100) && (retry || 0) < 8) { setTimeout(function(){ layout((retry||0)+1); }, 120); return; }
   cv.width = W * dpr; cv.height = H * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   const laneW = W / N;
@@ -111,6 +113,7 @@ function step() {
       b.x = Math.max(b.r, Math.min(W - b.r, b.x));
       if (b.y >= bins[b.idx].y - 13) {
         b.y = bins[b.idx].y - 13; b.done = true; landed++;
+        var _c=document.getElementById('cnt'); if(_c){var r=cv.getBoundingClientRect(); _c.textContent='landed '+landed+'/'+N+' W='+W+' H='+H+' rect='+Math.round(r.top)+','+Math.round(r.height);}
         if (landed === N) document.title = 'DONE ' + N;
         const el = document.getElementById('it' + b.idx);
         if (el) el.classList.add('on');
@@ -148,6 +151,9 @@ document.getElementById('go').addEventListener('click', release);
 window.addEventListener('resize', () => { layout(); if (!running) { balls = []; step(); } });
 layout();
 step();
+setTimeout(function(){ layout(); if (!running) { balls = []; step(); } }, 350);
+window.addEventListener('load', function(){ layout(); if (!running) { balls = []; step(); } });
+document.getElementById('cnt') && (document.getElementById('cnt').textContent='H='+H+' W='+W);
 setTimeout(release, 700);
 </script>
 </body></html>
